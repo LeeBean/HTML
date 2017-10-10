@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>page-ai</title>
+    <style>
+        body,
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        #game {
+            position: relative;
+            width: 750px;
+            left: 0px;
+            right: 0px;
+            margin: 0px auto;
+        }
+        
+        .bgdiv {
+            position: relative;
+            width: 100%;
+        }
+        
+        .div {
+            position: absolute;
+        }
+        
+        .hcenter {
+            top: 0px;
+            bottom: 0px;
+            margin: auto 0px;
+        }
+        
+        .text {
+            word-break: keep-all;
+            white-space: nowrap;
+            position: absolute;
+            text-align: left;
+        }
+        
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game"></div>
+
+    <!--<script src="moni.js"></script>-->
+    <script>
+        var zhen = JSON.parse(sessionStorage.getItem("zhenzheng"));
+        var zhenzhengObj = zhen.arr;
+        document.getElementById("game").style.width = zhen.w + "px";
+
+        zhenzhengObj.sort(function(a, b) {
+            return a.y > b.y ? 1 : -1;
+        });
+        //如果宽度或者高度小于4，并且宽度
+        for (var i = 0; i < zhenzhengObj.length; i++) {
+            var one = zhenzhengObj[i];
+            //合并到一行
+
+        }
+
+        function findLine(offy_, h, w, isend) {
+            var obj = {
+                bgcolor: "",
+                w: w,
+                y: offy_,
+                h: h,
+                arr: [],
+            };
+            for (var i = 0; i < zhenzhengObj.length; i++) {
+                var one = zhenzhengObj[i];
+                if (offy_ <= one.y && offy_ + h >= one.y + one.h) {
+                    obj.arr.push(one);
+                }
+            }
+            //没找到
+            if (obj.arr.length == 0) {
+                return false;
+            }
+
+            if (!isend) {
+                var endY = offy_ + h;
+                //如果如果当前高度存在别的相交部分
+                for (var i = 0; i < zhenzhengObj.length; i++) {
+                    var one = zhenzhengObj[i];
+                    if (one.y < endY && one.y + one.h > endY) {
+                        return false;
+                    }
+                }
+            }
+
+            for (var i = 0; i < obj.arr.length; i++) {
+                //和背景层尺寸一样
+                if (obj.arr[i].type == "div" && obj.arr[i].w == obj.w && obj.arr[i].h == obj.h) {
+                    obj.bgcolor = obj.arr[i].bgcolor;
+                    obj.arr.splice(i, 1);
+                }
+            }
+
+            var min = -1,
+                maxHeight = 0;;
+            for (var i = 0; i < obj.arr.length; i++) {
+                obj.arr[i].y -= obj.y;
+                if (min == -1) {
+                    min = obj.arr[i].y;
+                }
+                if (min > obj.arr[i].y) {
+                    min = obj.arr[i].y;
+                }
+                if (obj.arr[i].h > maxHeight) {
+                    maxHeight = obj.arr[i].h;
+                }
+            }
+            obj.arr.sort(function(a, b) {
+                return a.w > b.w ? -1 : 1;
+            });
+
+            obj.min = min;
+            obj.maxHeight = maxHeight;
+            return obj;
+        }
+
+        var maxHeight = zhen.h;
+        var arr = [];
+        //宽度100% 高度增加
+        var offy = 0;
+        for (var i = 0; i < maxHeight; i++) {
+            var h = i - offy;
+            var data = findLine(offy, h, zhen.w, i == maxHeight - 1);
+            if (data) {
+                offy = i;
+                arr.push(data);
+            }
+        }
+
+        var text = '';
+        for (var i = 0; i < arr.length; i++) {
+            var onediv = arr[i];
+            var ismin = false;
+            if (i > 0 && onediv.min > 0) {
+                ismin = true;
+            }
+            var style = 'height:' + onediv.h + 'px;';
+            if (onediv.bgcolor != "") {
+                style += 'background-color:' + onediv.bgcolor + ';';
+            }
+            text += '<div id="bgdiv' + i + '" class="bgdiv" style="' + style + '">';
+
+            if (ismin) {
+                //判断是不是 hcenter 居中
+                var className = "div",
+                    tops = onediv.min;
+                if (Math.abs((onediv.h - onediv.min) / 2 - onediv.maxHeight) <= 3) {
+                    className = "div hcenter";
+                    tops = 0;
+                }
+                text += '<div class="' + className + '" style="top:' + tops + 'px;width:100%;height:' + (onediv.maxHeight) + 'px;">';
+            }
+
+            for (var t = 0; t < onediv.arr.length; t++) {
+                var one = onediv.arr[t];
+                var y = one.y;
+                if (ismin) {
+                    y = one.y - onediv.min;
+                }
+                if (one.type == "div") {
+                    text += '<div id="onediv' + t + '" class="div" style="left:' + one.x + 'px;top:' + y + 'px;width:' + one.w + 'px;height:' + one.h + 'px;background-color:' + one.bgcolor + ';"></div>';
+                } else if (one.type == "text") {
+                    text += '<div id="onediv' + t + '" class="text" style="left:' + one.x + 'px;top:' + y + 'px;width:' + one.w + 'px;height:' + one.h + 'px;line-height:' + one.h + 'px;font-size:' + one.size + 'px;color:' + one.color + ';">' + one.text + '</div>';
+                } else if (one.type == "textcenter") {
+                    text += '<div id="onediv' + t + '" class="text center" style="left:' + one.x + 'px;top:' + y + 'px;width:' + one.w + 'px;height:' + one.h + 'px;background-color:' + one.bgcolor + ';color:' + one.color + ';">' + one.text + '</div>';
+                }
+            }
+
+            if (ismin) {
+                text += '</div>';
+            }
+            text += '</div>';
+        }
+        document.getElementById("game").innerHTML = text;
+        console.log(arr);
+    </script>
+
+
+</body>
+
+</html>

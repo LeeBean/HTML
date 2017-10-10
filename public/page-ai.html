@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>page-ai</title>
+    <style>
+        body,
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        body {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        #cvs {
+            left: 0px;
+            right: 0px;
+            margin: 0px auto;
+            position: absolute;
+            background-color: rgb(197, 196, 196);
+        }
+        
+        #cvs1 {
+            left: 0px;
+            right: 0px;
+            margin: 0px auto;
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        #state {
+            position: fixed;
+            width: 170px;
+            left: 10px;
+            top: 20px;
+            height: 400px;
+            color: white;
+            line-height: 24px;
+            font-size: 14px;
+        }
+        
+        #state li {
+            position: relative;
+            width: 100%;
+            height: 70px;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="cvs" width="375" height="667" style="width: 375px; height: 667px;"></canvas>
+    <canvas id="cvs1" width="375" height="667" style="width: 375px; height: 667px;"></canvas>
+
+    <ul id="state" style="background-color:rgba(0,0,0,0.4);">
+        <li>
+            <input type="file" id="files" accept1="image/jpeg,image/png,image/bmp" style="position:absolute;width:150px;height:50px;background:red;" onchange="changeImg(this.files)">
+        </li>
+        <li style="height:40px;">
+            <div style="position:absolute;width:100%;line-height:20px;top:0px;font-size:14px;">
+                间隙X：<input type="number" value="4" min="0" max="30" id="sizes" placeholder="间隙: 4" style="position:relative;width:50px;height:20px;">
+            </div>
+        </li>
+
+        <li style="height:40px;">
+            <div style="position:absolute;width:100%;line-height:20px;top:0px;font-size:14px;">
+                间隙Y：<input type="number" value="4" min="0" max="30" id="sizesY" placeholder="间隙Y: 4" style="position:relative;width:50px;height:20px;">
+            </div>
+
+            <input type="button" value="更新" onclick="updateSize()" style="position:absolute;width:50px;height:40px;left:108px;top:0px;">
+        </li>
+
+        <li>
+            <input type="button" value="导出" onclick="exports()" style="position:absolute;width:50px;height:40px;top:10px;">
+            <textarea id="textarea" placeholder="F12控制台会输出导出的JSON字符串" style="position:absolute;width:90px;height:50px;left:60px;top:10px;"></textarea>
+        </li>
+        <li style="height:40px;">
+            <div style="position:absolute;width:150px;height:60px;top:10px;">
+                计算: <span id="others">0次</span>
+            </div>
+        </li>
+        <li style="height:40px;">
+            建议1：手机UI效果图<br> 建议2：图片里面尽量不要有生僻文字
+            <br> 建议3：背景或者文字颜色不要有渐变色
+        </li>
+    </ul>
+    <script src="./javascripts/demo.js"></script>
+    <script src="./javascripts/index.js"></script>
+</body>
+
+</html>
