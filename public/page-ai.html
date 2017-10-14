@@ -12,83 +12,154 @@
         }
         
         body {
-            background-color: rgba(0, 0, 0, 0.2);
+            position: relative;
+            background: #111;
         }
-        
-        #cvs {
-            left: 0px;
-            right: 0px;
-            margin: 0px auto;
+        header{
+            position: fixed;
+            width:100%;
+            height: 50px;
+            color:red;
+            z-index: 1000;
+            background: #000;
+        }
+        header h1{
+            margin: 0 30%;
+            color:red;
+            line-height: 40px;
+        }
+        @media (min-width: 640px) { h1 {font-size:1rem;} }    
+        @media (min-width:960px) { h1 {font-size:1.5rem;} }    
+        @media (min-width:1100px) { h1 {font-size:2rem;} } 
+        .container{
             position: absolute;
-            background-color: rgb(197, 196, 196);
+            top:50px;
+            left: 25%;
+            height: 1920px;
+            background: #ccc;
+            overflow: scroll;
         }
         
+        #cvs ,#cvs1{
+            margin: 0px auto;
+        }
         #cvs1 {
-            left: 0px;
-            right: 0px;
-            margin: 0px auto;
-            position: absolute;
             pointer-events: none;
         }
         
         #state {
             position: fixed;
-            width: 170px;
-            left: 10px;
-            top: 20px;
+            top: 50px;
+            margin:0 8px;
+            width: 24%;
             height: 400px;
             color: white;
-            line-height: 24px;
             font-size: 14px;
         }
         
-        #state li {
-            position: relative;
+        #state>li input[type=button]{
+            background:#0c0;
+            border-radius: 3px;
+            outline: none;
+            border:0;
+            padding:5px;
+        }
+        #state>li input[type=button]{
             width: 100%;
-            height: 70px;
+        }
+        #state>li input[type=number]{
+            width: 40px;
+            text-align: center;
+        }
+        #state>li {
             list-style: none;
+            height: 40px;
+        }   
+        #state .gaps{
+            width: 100%;
+            display: flex;
+            justify-content:space-between;
+        }
+        #state>ol{
+            margin-left: 10px;
+            color:red;
+        }  
+        #state>ol>h4{
+            margin-left: -10px;
+        }
+        
+        .export:hover:after{
+            content:attr(data-msg);
+            color:red;
+        }
+        .upload label{
+            position: relative;
+            height: 15px;
+            margin-bottom: 20px;
+            background-color: #7F9CCB;
+            padding: 5px 0;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            display: block;
+            text-align: center;
+        }
+        .upload label>input{
+            position: absolute;
+            top:2px;
+            left:5px;
+            width:100%;
+        }
+
+        .upload label:hover{
+            background-color: #2D5BA3;
+        }
+
+        .upload label:active{
+            background-color: #0D3F8F;
         }
     </style>
 </head>
 
 <body>
-    <canvas id="cvs" width="375" height="667" style="width: 375px; height: 667px;"></canvas>
-    <canvas id="cvs1" width="375" height="667" style="width: 375px; height: 667px;"></canvas>
-
-    <ul id="state" style="background-color:rgba(0,0,0,0.4);">
+    <header>
+        <h1>Image 2 Html5 - Miracle Generator</h1>            
+    </header>
+    <div class="container">
+        <canvas id="cvs" width="375" height="667" ></canvas>
+        <canvas id="cvs1" width="375" height="667"  style='display:none;'></canvas>  
+    </div> 
+    <ul id="state">
+       <div class='upload'>
+            <label for="image_uploads">Choose images to transform (PNG, JPG,JPEG)
+                <input type="file" style='opacity:0;' accept=".jpg, .jpeg, .png" onchange="changeImg(this.files)">                    
+            </label>
+        </div>
         <li>
-            <input type="file" id="files" accept1="image/jpeg,image/png,image/bmp" style="position:absolute;width:150px;height:50px;background:red;" onchange="changeImg(this.files)">
+            <input type="button" value="Refresh" onclick="updateSize()">
         </li>
-        <li style="height:40px;">
-            <div style="position:absolute;width:100%;line-height:20px;top:0px;font-size:14px;">
-                间隙X：<input type="number" value="4" min="0" max="30" id="sizes" placeholder="间隙: 4" style="position:relative;width:50px;height:20px;">
-            </div>
+        <li  class='export' data-msg="The console will print the data of the html file exported">
+            <input value='Export HTML' type='button' onclick="exports()" />
         </li>
-
-        <li style="height:40px;">
-            <div style="position:absolute;width:100%;line-height:20px;top:0px;font-size:14px;">
-                间隙Y：<input type="number" value="4" min="0" max="30" id="sizesY" placeholder="间隙Y: 4" style="position:relative;width:50px;height:20px;">
-            </div>
-
-            <input type="button" value="更新" onclick="updateSize()" style="position:absolute;width:50px;height:40px;left:108px;top:0px;">
+        <li class="gaps">
+            <span>
+                Gap X：<input type="number" value="4" min="0" max="30" id="sizesX">
+            </span>
+            <span >
+                Gap Y：<input type="number" value="4" min="0" max="30" id="sizesY">
+            </span>
         </li>
-
         <li>
-            <input type="button" value="导出" onclick="exports()" style="position:absolute;width:50px;height:40px;top:10px;">
-            <textarea id="textarea" placeholder="F12控制台会输出导出的JSON字符串" style="position:absolute;width:90px;height:50px;left:60px;top:10px;"></textarea>
+            Calculated: <mark id="others">0</mark> Times
         </li>
-        <li style="height:40px;">
-            <div style="position:absolute;width:150px;height:60px;top:10px;">
-                计算: <span id="others">0次</span>
-            </div>
-        </li>
-        <li style="height:40px;">
-            建议1：手机UI效果图<br> 建议2：图片里面尽量不要有生僻文字
-            <br> 建议3：背景或者文字颜色不要有渐变色
-        </li>
+        <ol>
+            <h4>Notes：</h4>
+            <li>Mainly for Mobile UI renderings;</li>
+            <li>Pictures better not use rare texts;</li>
+            <li>Background or text color should not have gradient colors;</li>
+        </ol>
     </ul>
-    <script src="./javascripts/demo.js"></script>
-    <script src="./javascripts/index.js"></script>
+    
 </body>
-
+<script src="./demo.js"></script>
+<script src="./index.js"></script>
 </html>
