@@ -15,34 +15,54 @@
             position: relative;
             background: #111;
         }
-        header{
+        
+        header {
             position: fixed;
-            width:100%;
+            width: 100%;
             height: 50px;
-            color:red;
+            color: red;
             z-index: 1000;
             background: #000;
         }
-        header h1{
+        
+        header h1 {
             margin: 0 30%;
-            color:red;
+            color: red;
             line-height: 40px;
         }
-        @media (min-width: 640px) { h1 {font-size:1rem;} }    
-        @media (min-width:960px) { h1 {font-size:1.5rem;} }    
-        @media (min-width:1100px) { h1 {font-size:2rem;} } 
-        .container{
+        
+        @media (min-width: 640px) {
+            h1 {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (min-width:960px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (min-width:1100px) {
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .container {
             position: absolute;
-            top:50px;
+            top: 50px;
             left: 25%;
             height: 1920px;
             background: #ccc;
             overflow: scroll;
         }
         
-        #cvs ,#cvs1{
+        #cvs,
+        #cvs1 {
             margin: 0px auto;
         }
+        
         #cvs1 {
             pointer-events: none;
         }
@@ -50,49 +70,57 @@
         #state {
             position: fixed;
             top: 50px;
-            margin:0 8px;
+            margin: 0 8px;
             width: 24%;
             height: 400px;
             color: white;
             font-size: 14px;
         }
         
-        #state>li input[type=button]{
-            background:#0c0;
+        #state>li input[type=button] {
+            background: #0c0;
             border-radius: 3px;
             outline: none;
-            border:0;
-            padding:5px;
+            border: 0;
+            padding: 5px;
         }
-        #state>li input[type=button]{
+        
+        #state>li input[type=button] {
             width: 100%;
         }
-        #state>li input[type=number]{
+        
+        #state>li input[type=number] {
             width: 40px;
             text-align: center;
         }
+        
         #state>li {
             list-style: none;
             height: 40px;
-        }   
-        #state .gaps{
+        }
+        
+        #state .gaps {
+            margin-top: 30px;
             width: 100%;
             display: flex;
-            justify-content:space-between;
+            justify-content: space-between;
         }
-        #state>ol{
+        
+        #state>ol {
             margin-left: 10px;
-            color:red;
-        }  
-        #state>ol>h4{
+            color: red;
+        }
+        
+        #state>ol>h4 {
             margin-left: -10px;
         }
         
-        .export:hover:after{
-            content:attr(data-msg);
-            color:red;
+        .export:hover:after {
+            content: attr(data-msg);
+            color: red;
         }
-        .upload label{
+        
+        .upload label {
             position: relative;
             height: 15px;
             margin-bottom: 20px;
@@ -103,18 +131,19 @@
             display: block;
             text-align: center;
         }
-        .upload label>input{
+        
+        .upload label>input {
             position: absolute;
-            top:2px;
-            left:5px;
-            width:100%;
+            top: 2px;
+            left: 5px;
+            width: 100%;
         }
-
-        .upload label:hover{
+        
+        .upload label:hover {
             background-color: #2D5BA3;
         }
-
-        .upload label:active{
+        
+        .upload label:active {
             background-color: #0D3F8F;
         }
     </style>
@@ -122,29 +151,29 @@
 
 <body>
     <header>
-        <h1>Image 2 Html5 - Miracle Generator</h1>            
+        <h1>Image 2 Html5 - Miracle Generator</h1>
     </header>
     <div class="container">
-        <canvas id="cvs" width="375" height="667" ></canvas>
-        <canvas id="cvs1" width="375" height="667"  style='display:none;'></canvas>  
-    </div> 
+        <canvas id="cvs" width="375" height="667"></canvas>
+        <canvas id="cvs1" width="375" height="667" style='display:none;'></canvas>
+    </div>
     <ul id="state">
-       <div class='upload'>
-            <label for="image_uploads">Choose images to transform (PNG, JPG,JPEG)
+        <div class='upload'>
+            <label for="image_uploads">Choose images to transform (PNG、JPG、JPEG、BMP)
                 <input type="file" style='opacity:0;' accept=".jpg, .jpeg, .png" onchange="changeImg(this.files)">                    
             </label>
         </div>
         <li>
             <input type="button" value="Refresh" onclick="updateSize()">
         </li>
-        <li  class='export' data-msg="The console will print the data of the html file exported">
+        <li class='export' data-msg="The console will print the data of the html file exported">
             <input value='Export HTML' type='button' onclick="exports()" />
         </li>
         <li class="gaps">
             <span>
                 Gap X：<input type="number" value="4" min="0" max="30" id="sizesX">
             </span>
-            <span >
+            <span>
                 Gap Y：<input type="number" value="4" min="0" max="30" id="sizesY">
             </span>
         </li>
@@ -158,8 +187,9 @@
             <li>Background or text color should not have gradient colors;</li>
         </ol>
     </ul>
-    
+
 </body>
-<script src="./demo.js"></script>
-<script src="./index.js"></script>
+<script src="./javascripts/demo.js"></script>
+<script src="./javascripts/index.js"></script>
+
 </html>
