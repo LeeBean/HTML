@@ -13,22 +13,18 @@
         
         body {
             position: relative;
-            background: #111;
+            background: #eee;
         }
         
         header {
             position: fixed;
             width: 100%;
             height: 50px;
-            color: red;
+            color: #fff;
             z-index: 1000;
-            background: #000;
-        }
-        
-        header h1 {
-            margin: 0 30%;
-            color: red;
-            line-height: 40px;
+            background: #008fc7;
+            text-align: center;
+            line-height: 50px;
         }
         
         @media (min-width: 640px) {
@@ -51,9 +47,9 @@
         
         .container {
             position: absolute;
-            top: 50px;
-            left: 25%;
-            height: 1920px;
+            top: 60px;
+            left: 18%;
+            /* height: 1920px; */
             background: #ccc;
             overflow: scroll;
         }
@@ -69,12 +65,14 @@
         
         #state {
             position: fixed;
-            top: 50px;
+            top: 60px;
             margin: 0 8px;
-            width: 24%;
+            width: 15%;
             height: 400px;
             color: white;
             font-size: 14px;
+            background: #008fc7;
+            padding: 10px;
         }
         
         #state>li input[type=button] {
@@ -83,6 +81,8 @@
             outline: none;
             border: 0;
             padding: 5px;
+            cursor: pointer;
+            color: #fff;
         }
         
         #state>li input[type=button] {
@@ -90,17 +90,22 @@
         }
         
         #state>li input[type=number] {
-            width: 40px;
+            width: 45px;
             text-align: center;
+            height: 20px;
+            background: transparent;
+            border: 1px #fff solid;
+            color: #fff;
         }
         
         #state>li {
             list-style: none;
             height: 40px;
+            cursor: pointer;
         }
         
         #state .gaps {
-            margin-top: 30px;
+            margin-top: 40px;
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -122,21 +127,24 @@
         
         .upload label {
             position: relative;
-            height: 15px;
+            height: 30px;
             margin-bottom: 20px;
-            background-color: #7F9CCB;
+            background-color: #FFC107;
             padding: 5px 0;
             border-radius: 5px;
             font-size: 0.8rem;
             display: block;
             text-align: center;
+            margin-top: 20px;
+            line-height: 15px;
         }
         
         .upload label>input {
             position: absolute;
-            top: 2px;
-            left: 5px;
+            top: 0px;
+            left: 0px;
             width: 100%;
+            height: 40px;
         }
         
         .upload label:hover {
@@ -151,7 +159,7 @@
 
 <body>
     <header>
-        <h1>Image 2 Html5 - Miracle Generator</h1>
+        <h1>AI HTML5</h1>
     </header>
     <div class="container">
         <canvas id="cvs" width="375" height="667"></canvas>
@@ -159,8 +167,9 @@
     </div>
     <ul id="state">
         <div class='upload'>
-            <label for="image_uploads">Choose images to transform (PNG、JPG、JPEG、BMP)
-                <input type="file" style='opacity:0;' accept=".jpg, .jpeg, .png" onchange="changeImg(this.files)">                    
+            <label for="image_uploads">Upload Mockup <br>
+                (PNG、JPG、JPEG、BMP)
+                <input type="file" id="files" style='opacity:0;' accept=".jpg, .jpeg, .png" onchange="changeImg(this.files)">                    
             </label>
         </div>
         <li>
@@ -178,14 +187,14 @@
             </span>
         </li>
         <li>
-            Calculated: <mark id="others">0</mark> Times
+            Calculated: <span id="others">0</span> Times
         </li>
-        <ol>
+        <!-- <ol>
             <h4>Notes：</h4>
             <li>Mainly for Mobile UI renderings;</li>
             <li>Pictures better not use rare texts;</li>
             <li>Background or text color should not have gradient colors;</li>
-        </ol>
+        </ol> -->
     </ul>
 
 </body>
