@@ -1,4 +1,4 @@
-var monidata = function() {
+var mockdata = function() {
     return {
         "img": "images/demo.png",
         "key": "currimg",

@@ -146,7 +146,7 @@ function toChangeImg(src) {
 var orcCall = {
     callObj: {},
     callback: function(e) {
-        console.log(e);
+        //console.log(e);
         this.callObj[e.key](e);
     }
 }
@@ -156,34 +156,29 @@ var ocrObj = {};
 
 function getScript(key, url) {
     orcCall.callObj[key] = function(e) {
-        console.log(e);
-        if (e.key == "currimg") {
-            console.error(JSON.stringify(e));
-
-            if (e.data.words_result != undefined) {
-                ocrObj = e;
-                ocrTextObj = e.data.words_result;
-                //{"location":{"width":105,"top":88,"height":31,"left":1038},"words":"\u767e\u5ea6ocr"}
-            }
+        //if (e.key == "currimg") {
+        if (e.data.words_result) {
+            ocrObj = e;
+            ocrTextObj = e.data.words_result;
         }
+        //}
         exportsCall();
         auto.draw();
     }
 
     var form = new FormData();
-    form.append("key", key);
-    form.append("url", url);
+    form.append("img", auto.file);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
         if (req.readyState == 4 && req.status == 200) {
-            console.log(req.responseText);
+            //console.log(req.responseText);
             var data = JSON.parse(req.responseText);
-            orcCall.callObj[data.key](data);
+            orcCall.callObj["currimg"](data);
             console.log(data);
         }
 
     }
-    req.open("post", "test.php", false);
+    req.open("post", "/uploadPhoto", false);
     req.send(form);
 
 }
@@ -267,19 +262,20 @@ function getRGB(x, y, sizex, sizey, hasone) {
 }
 
 function exports() {
-    var e = monidata();
-    console.log(e);
-    if (e.key == "currimg") {
-        if (e.data.words_result != undefined) {
-            ocrObj = e;
-            ocrTextObj = e.data.words_result;
-            //{"location":{"width":105,"top":88,"height":31,"left":1038},"words":"\u767e\u5ea6ocr"}
-        }
-    }
-    exportsCall();
-    auto.draw();
+    //var e = mockdata();
+    // if (e.key == "currimg") {
+    //     if (e.data.words_result != undefined) {
+    //         ocrObj = e;
+    //         ocrTextObj = e.data.words_result;
+    //         //{"location":{"width":105,"top":88,"height":31,"left":1038},"words":"\u767e\u5ea6ocr"}
+    //     }
+    // }
 
-    //getScript("currimg", auto.img.src);
+    //exportsCall();
+    //auto.draw();
+    getScript("currimg", auto.src);
+
+
 }
 
 function exportsCall() {
@@ -358,10 +354,6 @@ function exportsCall() {
             }
             if (!arr[index]) {
                 arr[index] = [];
-            }
-
-            if (char == "传") {
-                console.error(JSON.stringify(allobj));
             }
 
             arr[index].push({
@@ -543,7 +535,7 @@ function exportsCall() {
             //取色
             var colorKey = getRGB(l + w / 2, t, 1, 1, true).split("_");
             color = "rgb(" + colorKey[0] + "," + colorKey[1] + "," + colorKey[2] + ")";
-            console.error(colorKey, color);
+            // console.error(colorKey, color);
         }
 
         var bgsizew = auto.img.width;
@@ -639,7 +631,7 @@ function exportsCall() {
         h: auto.img.height,
         arr: buildArr
     }
-    sessionStorage.setItem("zhenzheng", JSON.stringify(obj));
+    sessionStorage.setItem("export", JSON.stringify(obj));
     console.log(JSON.stringify(obj));
     seehtml();
 }
@@ -692,6 +684,7 @@ function imgStart() {
 
 function changeImg(files) {
     var file = files[0];
+    auto.file = file;
     console.log(file);
     var reader = new FileReader();
     //将文件以Data URL形式读入页面  
@@ -699,7 +692,6 @@ function changeImg(files) {
     reader.onload = function(e) {
         auto.src = this.result;
         toChangeImg(auto.src);
-
         document.getElementById("files").value = "";
     }
 }
@@ -716,7 +708,8 @@ function updateSize(setscaless) {
 }
 
 var auto = {
-    src: "./images/demo.png", //图片
+    //src: "./images/demo.png", //图片
+    src: "", //图片
     heSize: 4, //合并的颗粒x
     heSizeY: 4, //合并的颗粒y
     w: 640,
@@ -727,6 +720,7 @@ var auto = {
     tempCvs: null,
     imageData: null,
     img: null,
+    file: null,
     pointObj: {
         x: 0,
         y: 0,

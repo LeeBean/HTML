@@ -5,7 +5,7 @@ var formidable = require('formidable');
 
 /* GET home page. */
 router.route("/uploadPhoto").get(function(req, res) {
-    res.render("uploadPhoto", { title: '图片文字识别', message: "" });
+    res.render("uploadPhoto", { title: 'OCR Test', message: "" });
 }).post(function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");

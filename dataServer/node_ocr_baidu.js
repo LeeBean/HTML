@@ -15,15 +15,20 @@ var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
 var fs = require('fs');
 
 module.exports = {
-    getResult: function(res, imgName) {;
+    getResult: function(res, imgName) {
         var image = fs.readFileSync(imgName);
         var base64Img = new Buffer(image).toString('base64');
         var options = {
             recognize_granularity: 'small'
         }
         client.general(base64Img, options).then(function(result) {
-            console.log(JSON.stringify(result));
-            res.json(result);
+            var resp = {
+                img: 'images/demo.png',
+                key: 'key',
+                data: result
+            }
+            console.log(JSON.stringify(resp));
+            res.json(resp);
         }).catch(function(err) {
             // 如果发生网络错误
             console.log(err);
